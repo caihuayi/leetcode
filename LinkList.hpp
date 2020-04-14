@@ -2,23 +2,26 @@
 #define _LINKLIST_HPP_
 #include <initializer_list>
 #include <iostream>
+
+template<typename T>
+struct ListNode {
+        T val;
+        ListNode *next;
+        ListNode(T x) : val(x), next(nullptr) {}
+};
+
 template<typename T>
 class LinkList
 {
 public:
-    struct ListNode {
-        T val;
-        ListNode *next;
-        ListNode(int x) : val(x), next(nullptr) {}
-    };
     LinkList()
     {
-        head = new ListNode();
-        tail = head;
+        
     }
+
     LinkList(T first_element)
     {
-        head = new ListNode(first_element);
+        head = new ListNode<T>(first_element);
         tail = head;
     }
     LinkList(std::initializer_list<T> inlist)
@@ -26,7 +29,7 @@ public:
         if (inlist.size() != 0)
         {
             typename std::initializer_list<T>::iterator iter = inlist.begin();
-            head = new ListNode(*(inlist.begin()));
+            head = new ListNode<T>(*(inlist.begin()));
             tail = head;
             ++iter;
             for (; iter != inlist.end(); ++iter)
@@ -36,9 +39,24 @@ public:
         }
     }
 
+    ListNode<T>* get_head() const
+    {
+        return head;
+    }
+    void set_head(ListNode<T>* head)
+    {
+        this->head = head;
+        ListNode<T> *p = head;
+        while(p->next)
+        {
+            p = p->next;
+        }
+        this->tail = p;
+    }
+
     void print()
     {
-        ListNode* p = head;
+        ListNode<T>* p = head;
         while(p)
         {
             std::cout << p->val << "->";
@@ -50,12 +68,12 @@ public:
 private:
     void _push_back(T value)
     {
-        ListNode* p = new ListNode(value);
+        ListNode<T>* p = new ListNode<T>(value);
         tail->next = p;
         tail = p;
     }
-    ListNode* head;
-    ListNode* tail;
+    ListNode<T>* head;
+    ListNode<T>* tail;
 };
 
 #endif //_LINKLIST_CPP_
